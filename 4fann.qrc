@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/add.png</file>
+        <file>image/lollipop.png</file>
+        <file>image/cigarette.png</file>
+        <file>image/factory.png</file>
+        <file>image/screwdriver.png</file>
+    </qresource>
+</RCC>
