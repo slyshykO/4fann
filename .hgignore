@@ -1,0 +1,7 @@
+syntax: glob
+*.user
+Makefile*
+build
+image/Thumbs.db
+*.pdb
+bin
