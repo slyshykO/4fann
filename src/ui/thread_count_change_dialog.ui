@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Изменение количества потоков</string>
+   <string>Change thread quantity</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -21,7 +21,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Максимальное количество рабочих потоков</string>
+          <string>Max thread quantity</string>
          </property>
         </widget>
        </item>

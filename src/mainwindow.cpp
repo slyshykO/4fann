@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     createActions();
 
     m_taskList = new QListWidget();
-    m_taskDock = new QDockWidget(tr("Список тренировок"));
+    m_taskDock = new QDockWidget(tr("Training list"));
     m_taskDock->setWidget(m_taskList);
     addDockWidget(Qt::LeftDockWidgetArea, m_taskDock, Qt::Vertical);
 
@@ -44,12 +44,12 @@ void MainWindow::createActions()
 {
     QIcon icon;
 
-    m_startTrainAct = new QAction(tr("Начать тренировку"), this);
+    m_startTrainAct = new QAction(tr("Add training"), this);
     icon.addPixmap(QPixmap(tr(":/image/add.png")), QIcon::Normal, QIcon::Off);
     m_startTrainAct->setIcon(icon);
     connect(m_startTrainAct, SIGNAL(triggered()), this, SLOT(startTraining()));
 
-    m_changeMaxThreadAct =  new QAction(tr("Изменить кол-во потоков"), this);
+    m_changeMaxThreadAct =  new QAction(tr("Change thread quantity"), this);
     icon.addPixmap(QPixmap(tr(":/image/screwdriver.png")), QIcon::Normal, QIcon::Off);
     m_changeMaxThreadAct->setIcon(icon);
     connect(m_changeMaxThreadAct, SIGNAL(triggered()), this, SLOT(changeMaxThreadCount()));

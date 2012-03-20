@@ -235,14 +235,14 @@ uint NetPanel::numberOfCandidateGroups()
 void NetPanel::openTrainFile()
 {
     QString fileName;
-    fileName = QFileDialog::getOpenFileName(0,tr("Открыть файл данных тренировки"));
+    fileName = QFileDialog::getOpenFileName(0,tr("Open trainibg data file"));
     ui->trainEdit->setText(fileName);
     if( !fileName.isNull() )
         {
             QVector<int> head = readTrainHead(fileName);
             if( head.size() == 3)
                 {
-                    ui->inpOutlabel->setText(QString(tr("Входов : %1 ; Выходов : %2"))
+                    ui->inpOutlabel->setText(QString(tr("Inputs : %1 ; Outputs : %2"))
                                              .arg(head[1]).arg(head[2]));
                     m_numInput = head[1];
                     m_numOutput = head[2];
@@ -275,7 +275,7 @@ QVector<int> NetPanel::readTrainHead(const QString &fn)
 void NetPanel::openTestFile()
 {
     QString fileName;
-    fileName = QFileDialog::getOpenFileName(0,tr("Открыть файл тестовых данных"));
+    fileName = QFileDialog::getOpenFileName(0,tr("Open test data file"));
     ui->testEdit->setText(fileName);
 }
 
