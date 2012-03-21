@@ -5,6 +5,7 @@
 *******************************************************************************/
 
 #include "nettrainview.hpp"
+#include <QDebug>
 #include <QTextEdit>
 #include <QBoxLayout>
 #include <plot.hpp>
@@ -18,7 +19,9 @@ NetTrainView::NetTrainView(QWidget *parent) :
     m_msePlot->setMinimumSize(100,100);
     m_msePlot->replot();
     m_msePlot->addCurve(tr("MSE"), QVector<QPointF>());
+    m_msePlot->addCurve(tr("Test MSE"), QVector<QPointF>());
     m_bitFailPlot->addCurve(tr("Bit fail"), QVector<QPointF>());
+    m_bitFailPlot->addCurve(tr("Test Bit fail"), QVector<QPointF>());
 
     m_netText = new QTextEdit(this);
     //m_netText->setMaximumSize(150,150);
@@ -42,22 +45,44 @@ void NetTrainView::setNetText(const QString &txt)
     m_netText->setText(txt);
 }
 
-void NetTrainView::setMSEData(const QVector<float> & data, uint step)
+void NetTrainView::setMSEData(const QVector<float> & data, const QVector<uint> &steps)
 {
     QVector<QPointF> crv;
     for(int i = 0; i < data.size(); i++)
-        crv.append(QPointF(i*step,data[i]));
+        crv.append(QPointF(steps[i],data[i]));
 
     m_msePlot->curve(0)->setSamples(crv);
     m_msePlot->replot();
 }
 
-void NetTrainView::setBitFailData(const QVector<uint> & data, uint step)
+void NetTrainView::setBitFailData(const QVector<uint> & data, const QVector<uint> &steps)
 {
     QVector<QPointF> crv;
     for(int i = 0; i < data.size(); i++)
-        crv.append(QPointF(i*step,data[i]));
+        crv.append(QPointF(steps[i],data[i]));
 
     m_bitFailPlot->curve(0)->setSamples(crv);
+    m_bitFailPlot->replot();
+}
+
+void NetTrainView::setTestMSEData(const QVector<float> &data, const QVector<uint> &steps)
+{
+    QVector<QPointF> crv;
+    for(int i = 0; i < data.size(); i++)
+        crv.append(QPointF(steps[i],data[i]));
+
+    qDebug()<<__FUNCTION__;
+    qDebug()<<data;
+    m_msePlot->curve(1)->setSamples(crv);
+    m_msePlot->replot();
+}
+
+void NetTrainView::setTestBitFailData(const QVector<uint> &data, const QVector<uint> &steps)
+{
+    QVector<QPointF> crv;
+    for(int i = 0; i < data.size(); i++)
+        crv.append(QPointF(steps[i],data[i]));
+
+    m_bitFailPlot->curve(1)->setSamples(crv);
     m_bitFailPlot->replot();
 }

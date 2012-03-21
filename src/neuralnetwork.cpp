@@ -5,7 +5,6 @@
 */
 
 #include "neuralnetwork.hpp"
-#include "trainingdata.hpp"
 
 #include <QDebug>
 #include <QFile>
@@ -30,12 +29,12 @@ int FANN_API internalCallback(fann *ann, fann_train_data *train, unsigned int ma
     if(ann->user_data)
         {
             NeuralNetwork * net = reinterpret_cast<NeuralNetwork *>(ann->user_data);
-
-            net->addToMseHistoty(fann_get_MSE(ann));
-            net->addToBitFailHistory(fann_get_bit_fail(ann));
-            net->setEpoch(epochs);
-
             qDebug()<<QThread::currentThreadId()<<" epoch:"<<epochs<<" MSE:"<<fann_get_MSE(ann);
+
+            net->detectMinAnn();
+            net->addToHistory(fann_get_MSE(ann), fann_get_bit_fail(ann), epochs);
+            //test
+
         }
     ::Sleep(100);
     if( QThread::currentThread()->priority() != QThread::IdlePriority )
@@ -49,7 +48,7 @@ NeuralNetwork::NeuralNetwork(QObject *parent)
     m_desired_error ((float) 0.001),
     m_connectionRate((fann_type) 0.5), m_learningRate((fann_type) 0.7),
     m_max_epochs (500000), m_epochs_between_reports (1000), m_numTrainnings(0),
-    m_saveTrain(false), m_mse (0), m_totalConnections(0), m_ann(0),
+    m_saveTrain(false), m_ann(0),
     m_activationHidden(0), m_activationOutput(0), m_netType(FANN_NETTYPE_LAYER),
     m_max_neurons(10),m_neurons_between_reports(1),isCascadeTrain(false),
     m_bitFailLimit(0.035),
@@ -73,7 +72,11 @@ NeuralNetwork::NeuralNetwork(QObject *parent)
     m_candidateLimit(1000),
     m_maximumOutEpochs(150),
     m_maximumCandidateEpochs(150),
-    m_numberOfCandidateGroups(2)
+    m_numberOfCandidateGroups(2),
+    m_testMse(10000),
+    m_minTestAnn(0),
+    m_trainMse(10000),
+    m_minTrainAnn(0)
 {
     connect(&m_trainFutureWatcher, SIGNAL(finished()), this, SLOT(trainFinished()) );
     connect(&m_trainFutureWatcher, SIGNAL(started()), this, SLOT(trainStarted()) );
@@ -92,6 +95,16 @@ void NeuralNetwork::annDestroy()
             fann_destroy(m_ann);
             m_ann = 0;
             resetParams();
+        }
+    if ( m_minTestAnn != 0)
+        {
+            fann_destroy(m_minTestAnn);
+            m_minTestAnn = 0;
+        }
+    if ( m_minTrainAnn != 0)
+        {
+            fann_destroy(m_minTrainAnn);
+            m_minTrainAnn = 0;
         }
 }
 
@@ -255,6 +268,7 @@ void NeuralNetwork::trainOnData(const TrainingData &data, unsigned int max_epoch
 {
     if ((m_ann != NULL) && (data.m_train_data != NULL))
         {
+            m_testData.loadFromFile(m_testFileName);
             setState(Training);
             isCascadeTrain = false;
 
@@ -272,6 +286,7 @@ void NeuralNetwork::trainOnData(const TrainingData &data)
 {
     if ((m_ann != NULL) && (data.m_train_data != NULL))
         {
+            m_testData.loadFromFile(m_testFileName);
             setState(Training);
             isCascadeTrain = false;
 
@@ -289,6 +304,7 @@ void NeuralNetwork::cascadeTrainOnData(const TrainingData &data)
 {
     if ((m_ann != NULL) && (data.m_train_data != NULL))
         {
+            m_testData.loadFromFile(m_testFileName);
             setState(Training);
             isCascadeTrain = true;
 
@@ -302,6 +318,44 @@ void NeuralNetwork::cascadeTrainOnData(const TrainingData &data)
         }
 }
 
+void NeuralNetwork::detectMinAnn()
+{
+    if( m_ann == 0)
+        return;
+    if(m_minTrainAnn == 0)
+        {
+            m_minTrainAnn = fann_copy(m_ann);
+        }
+    if(m_minTestAnn == 0)
+        {
+            m_minTestAnn = fann_copy(m_ann);
+        }
+
+    if (fann_get_MSE(m_ann) < fann_get_MSE(m_minTrainAnn))
+        {
+            fann_destroy(m_minTrainAnn);
+            m_minTrainAnn = fann_copy(m_ann);
+        }
+
+    if( !m_testData.isNull() )
+        {
+            fann * tmpTestAnn = fann_copy(m_ann);
+            fann_reset_MSE(tmpTestAnn);
+            fann_test_data(tmpTestAnn,m_testData.data());
+            m_mseTestHistory.append(fann_get_MSE(tmpTestAnn));
+            m_bitFailTestHistory.append(fann_get_bit_fail(tmpTestAnn));
+            if (fann_get_MSE(m_ann) < fann_get_MSE(tmpTestAnn))
+                {
+                    fann_destroy(m_minTestAnn);
+                    m_minTestAnn = tmpTestAnn;
+                }
+            else
+                {
+                    fann_destroy(tmpTestAnn);
+                }
+        }
+}
+
 void NeuralNetwork::trainFinished()
 {
     qDebug()<<__FUNCTION__;
@@ -309,8 +363,16 @@ void NeuralNetwork::trainFinished()
 
     QFileInfo fileInfo;
     fileInfo.setFile(QDir(m_annDirDefinition),fileName());
+    QString testsave = fileInfo.baseName() + "-minTest." + fileInfo.completeSuffix();
+    QString trainsave = fileInfo.baseName() + "-minTrain." + fileInfo.completeSuffix();
+    QFileInfo fileInfoTest;
+    fileInfoTest.setFile(QDir(m_annDirDefinition),testsave);
+    QFileInfo fileInfoTrain;
+    fileInfoTrain.setFile(QDir(m_annDirDefinition),trainsave);
 
     fann_save(m_ann, fileInfo.absoluteFilePath().toLocal8Bit());
+    fann_save(m_minTestAnn,fileInfoTest.absoluteFilePath().toLocal8Bit());
+    fann_save(m_minTrainAnn,fileInfoTrain.absoluteFilePath().toLocal8Bit());
 
     //сохранение протокола тренировки
     QFile file( fileInfo.absoluteFilePath().append(".prot"));
@@ -335,6 +397,12 @@ void NeuralNetwork::trainFinished()
             stream<<endl;
             stream<<"train bit fails:";
             foreach ( const uint & u , m_bitFailHistory)
+                {
+                    stream<<u<<" ";
+                }
+            stream<<endl;
+            stream<<"epochs:";
+            foreach ( const uint & u , m_epochHistory)
                 {
                     stream<<u<<" ";
                 }
@@ -402,6 +470,16 @@ QString NeuralNetwork::fileName()
 void NeuralNetwork::setFileName(const QString &file)
 {
     m_fileName = file;
+}
+
+QString NeuralNetwork::testFileName()
+{
+    return m_testFileName;
+}
+
+void NeuralNetwork::setTestFileName(const QString &file)
+{
+    m_testFileName = file;
 }
 
 void NeuralNetwork::setNetType(uint type)
@@ -781,14 +859,20 @@ void NeuralNetwork::setnumberOfCandidateGroups(uint v)
 }
 
 
-fann_type NeuralNetwork::getMSE()
+float NeuralNetwork::getMSE()
 {
-    return m_mse;
+    if(m_ann != 0)
+        return fann_get_MSE(m_ann);
+
+    return 0;
 }
 
 unsigned int NeuralNetwork::getTotalConnections()
 {
-    return m_totalConnections;
+    if(m_ann != 0)
+        return fann_get_total_connections(m_ann);
+
+    return 0;
 }
 
 void NeuralNetwork::setFuture(const QFuture<void> &future)
@@ -806,6 +890,16 @@ bool NeuralNetwork::saveTrain()
     return m_saveTrain;
 }
 
+void NeuralNetwork::addToHistory(float mse, uint bitFail, uint epochs)
+{
+    QMutexLocker locker(&m_mutex);
+    m_mseHistory.append(mse);
+    m_bitFailHistory.append(bitFail);
+    m_epochHistory.append(epochs);
+    m_epoch = epochs;
+    emit stateChanged(static_cast<int>(m_state));
+}
+
 QVector<float> NeuralNetwork::mseHistory()
 {
     QVector<float> res;
@@ -817,35 +911,48 @@ QVector<float> NeuralNetwork::mseHistory()
     return res;
 }
 
-void NeuralNetwork::addToMseHistoty(float mse)
-{
-    QMutexLocker locker(&m_mutex);
-    m_mseHistory.append(mse);
-}
-
 QVector<uint> NeuralNetwork::bitFailHistory()
 {
     QVector<uint> res;
     {
         QMutexLocker locker(&m_mutex);
         res.resize(m_bitFailHistory.size());
-        res.resize(m_bitFailHistory.size());
         std::copy(m_bitFailHistory.constBegin(), m_bitFailHistory.constEnd(), res.begin());
     }
     return res;
 }
 
-void NeuralNetwork::addToBitFailHistory(uint val)
+QVector<float> NeuralNetwork::mseTestHistory()
 {
-    QMutexLocker locker(&m_mutex);
-    m_bitFailHistory.append(val);
+    QVector<float> res;
+    {
+        QMutexLocker locker(&m_mutex);
+        res.resize(m_mseTestHistory.size());
+        std::copy(m_mseTestHistory.constBegin(), m_mseTestHistory.constEnd(), res.begin());
+    }
+    return res;
 }
 
-void NeuralNetwork::setEpoch(int epoch)
+QVector<uint> NeuralNetwork::bitFailTestHistory()
 {
-    QMutexLocker locker(&m_mutex);
-    m_epoch = epoch;
-    emit stateChanged(static_cast<int>(m_state));
+    QVector<uint> res;
+    {
+        QMutexLocker locker(&m_mutex);
+        res.resize(m_bitFailTestHistory.size());
+        std::copy(m_bitFailTestHistory.constBegin(), m_bitFailTestHistory.constEnd(), res.begin());
+    }
+    return res;
+}
+
+QVector<uint> NeuralNetwork::epochsHistory()
+{
+    QVector<uint> res;
+    {
+        QMutexLocker locker(&m_mutex);
+        res.resize(m_epochHistory.size());
+        std::copy(m_epochHistory.constBegin(), m_epochHistory.constEnd(), res.begin());
+    }
+    return res;
 }
 
 int NeuralNetwork::epoch()

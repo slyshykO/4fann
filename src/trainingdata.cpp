@@ -52,6 +52,11 @@ bool TrainingData::isNull()
     return (m_train_data == 0);
 }
 
+fann_train_data *TrainingData::data()
+{
+    return m_train_data;
+}
+
 void TrainingData::destroyData()
 {
     if(m_train_data != 0)

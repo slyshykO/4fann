@@ -16,8 +16,7 @@
 #include <QRunnable>
 
 #include <doublefann.h>
-
-class TrainingData;
+#include "trainingdata.hpp"
 
 class NeuralNetwork : public QObject
 {
@@ -30,7 +29,6 @@ public:
         Training,
         Ready
     };
-
 
     NeuralNetwork(QObject * parent = 0);
     ~NeuralNetwork();
@@ -49,6 +47,8 @@ public:
     void setAnnDirDefinition( const QString &file );
     QString fileName();
     void setFileName( const QString &file );
+    QString testFileName();
+    void setTestFileName( const QString &file );
 
     void setNetType(uint type);
     int  netType();
@@ -138,18 +138,21 @@ public:
     bool useSavedDataTrain();
     void setUseSavedDataTrain(bool value);
 
-    fann_type getMSE();
     unsigned int getTotalConnections();
-
     void setFuture( const QFuture<void> & future );
 
+    float getMSE();
+    void detectMinAnn();
+
+
 public:
-    // Потокобезопасные функцииs
+    // Потокобезопасные функции
+    void addToHistory(float mse, uint bitFail, uint epochs);
     QVector<float> mseHistory();
-    void addToMseHistoty(float);
     QVector<uint> bitFailHistory();
-    void addToBitFailHistory(uint );
-    void setEpoch(int);
+    QVector<float> mseTestHistory();
+    QVector<uint> bitFailTestHistory();
+    QVector<uint> epochsHistory();
     int epoch();
     int state();
 
@@ -163,6 +166,19 @@ private:
 
     /** Указатель на нейронную сеть */
     struct fann * m_ann;
+    /** Временно хранит среднеквадратическую ошибку для теста */
+    double m_testMse;
+    struct fann * m_minTestAnn;
+    /** Временно хранит среднеквадратическую ошибку для тренировки */
+    double m_trainMse;
+    struct fann * m_minTrainAnn;
+    /** Тренировочные данные для тестов*/
+    QString m_testFileName;
+    TrainingData m_testData;
+
+
+
+
     /** Тип нейронной сети*/
     uint m_netType;
     /** Количество входов нейронной сети*/
@@ -184,7 +200,7 @@ private:
     int m_activationHidden;
     /**  Функця активации выходов*/
     int m_activationOutput;
-    /**Функция ошибки */
+    /** Функция ошибки */
     int m_trainErrorFunc;
 
     uint m_max_epochs;
@@ -199,11 +215,6 @@ private:
 
     /** Указывает на количество тренировок, которые вносятся в сети */
     int m_numTrainnings;
-
-    /** Временно хранит среднеквадратическую ошибку */
-    double m_mse;
-    /** Временно хранит общее число подключений в сети */
-    int m_totalConnections;
 
     double m_hiddenActivationSteppness;
     double m_outputActivationSteppness;
@@ -227,14 +238,13 @@ private:
     uint m_maximumCandidateEpochs;
     uint m_numberOfCandidateGroups;
 
-    void outputToChar (fann_type * output, char &c);
-    void resetParams();
-    void annDestroy();
-
     QMutex m_mutex;
     QFutureWatcher<void> m_trainFutureWatcher;
     QVector<float> m_mseHistory;
     QVector<uint> m_bitFailHistory;
+    QVector<float> m_mseTestHistory;
+    QVector<uint> m_bitFailTestHistory;
+    QVector<uint> m_epochHistory;
     int m_epoch;
 
     ENeuralState m_state;
@@ -245,6 +255,9 @@ private slots:
    void trainPaused();
 private:
    void setState( ENeuralState );
+   void resetParams();
+   void annDestroy();
+
    friend class NetTraining;
 };
 

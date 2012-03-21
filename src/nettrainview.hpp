@@ -20,8 +20,10 @@ public:
     explicit NetTrainView(QWidget *parent = 0);
 
     void setNetText(const QString & txt);
-    void setMSEData(const QVector<float> & , uint step = 1);
-    void setBitFailData(const QVector<uint> & , uint step = 1);
+    void setMSEData(const QVector<float> & , const QVector<uint> & );
+    void setBitFailData(const QVector<uint> & , const QVector<uint> & );
+    void setTestMSEData(const QVector<float> & , const QVector<uint> & );
+    void setTestBitFailData(const QVector<uint> & , const QVector<uint> & );
 private:
     TPlot * m_msePlot;
     TPlot * m_bitFailPlot;

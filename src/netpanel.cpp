@@ -246,7 +246,8 @@ void NetPanel::openTrainFile()
                                              .arg(head[1]).arg(head[2]));
                     m_numInput = head[1];
                     m_numOutput = head[2];
-                    addHidden(head[1]);
+                    if(ui->hiddenLayers->columnCount() == 0)
+                        addHidden(head[1]);
                 }
         }
 

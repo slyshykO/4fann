@@ -21,6 +21,7 @@ public:
     ~TrainingData();
 
     bool isNull();
+    struct fann_train_data* data();
 
     QString fileName();
     void setFileName(const QString & fn);

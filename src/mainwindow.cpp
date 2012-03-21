@@ -127,6 +127,8 @@ void MainWindow::startTraining()
                     net->setMaximumCandidateEpochs(panel->maximumCandidateEpochs());
                     net->setnumberOfCandidateGroups(panel->numberOfCandidateGroups());
 
+                    net->setTestFileName(panel->testFileName());
+
                     TrainingData * trainingData = new TrainingData();
                     qDebug()<<"create data";
 
@@ -198,9 +200,13 @@ void MainWindow::projectChanged()
                         {
                             trainView->setNetText(m_currentProject->nets()->at(it)->toString());
                             trainView->setMSEData(m_currentProject->nets()->at(it)->mseHistory(),
-                                                  m_currentProject->nets()->at(it)->epochsBetweenReports());
+                                                  m_currentProject->nets()->at(it)->epochsHistory());
                             trainView->setBitFailData(m_currentProject->nets()->at(it)->bitFailHistory(),
-                                                      m_currentProject->nets()->at(it)->epochsBetweenReports());
+                                                      m_currentProject->nets()->at(it)->epochsHistory());
+                            trainView->setTestMSEData(m_currentProject->nets()->at(it)->mseTestHistory(),
+                                                      m_currentProject->nets()->at(it)->epochsHistory());
+                            trainView->setTestBitFailData(m_currentProject->nets()->at(it)->bitFailTestHistory(),
+                                                      m_currentProject->nets()->at(it)->epochsHistory());
                         }
                 }
         }
