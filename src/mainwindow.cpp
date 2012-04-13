@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
     m_currentProject = new NetProject(this);
     connect(m_currentProject, SIGNAL(projectChanged()), this, SLOT(projectChanged()) );
 
+    connect(m_taskList, SIGNAL(currentRowChanged(int)), this, SLOT(setCurrent(int)) );
+    connect(m_tabs, SIGNAL(currentChanged(int)), this, SLOT(setCurrent(int)) );
+
 }
 
 void MainWindow::createActions()
@@ -69,6 +72,14 @@ void MainWindow::changeMaxThreadCount()
         {
             QThreadPool::globalInstance()->setMaxThreadCount(dialog.newThreadCount());
         }
+}
+
+void MainWindow::setCurrent(int pos)
+{
+    if(m_tabs->currentIndex() != pos)
+        m_tabs->setCurrentIndex(pos);
+    if(m_taskList->currentRow() != pos)
+        m_taskList->setCurrentRow(pos);
 }
 
 void MainWindow::newTrening()

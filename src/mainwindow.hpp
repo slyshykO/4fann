@@ -25,6 +25,7 @@ private slots:
     void startTraining();
     void projectChanged();
     void changeMaxThreadCount();
+    void setCurrent(int);
 private:
     void createActions();
 private:
