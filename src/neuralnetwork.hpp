@@ -58,7 +58,7 @@ public:
     uint numOutput() const;
     uint numHiddenLayers();
     QVector<uint> numNeuronsHidden();
-    void setNumNeuronsHidden(QVector<uint> & numNeuronsHidden);
+    void setNumNeuronsHidden(QVector<uint> numNeuronsHidden);
 
     float desiredError();
     void setDesiredError(float desired_error);

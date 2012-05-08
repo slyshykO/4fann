@@ -62,12 +62,19 @@ else {
 #FANN_DIR - Переменная окружения, должна указывать директорию проекта FANN
 INCLUDEPATH += $$(FANN_DIR)/src/include
 LIBS +=      -L$$(FANN_DIR)/bin
+win32:{
 CONFIG(debug, debug|release) {
     LIBS += -lfanndoubled
 } else {
     LIBS += -lfanndouble
 }
+}
 # ==============================  FANN ==============================
+
+unix:{
+qtAddLibrary(doublefann)
+QMAKE_CXXFLAGS += -std=c++0x
+}
 
 #win32:RC_FILE = mystery_ai.rc
 
@@ -99,4 +106,6 @@ FORMS += \
 RESOURCES += \
     4fann.qrc
 
-
+unix:{
+QMAKE_RPATHDIR += $$(FANN_DIR)/bin $$(QWT_ROOT)/lib
+}

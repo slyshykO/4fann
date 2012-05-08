@@ -17,6 +17,15 @@
 #include <cmath>
 #include <algorithm>
 
+class SleeperThread : public QThread
+{
+public:
+static void msleep(unsigned long msecs)
+{
+    QThread::msleep(msecs);
+}
+};
+
 int FANN_API internalCallback(fann *ann, fann_train_data *train, unsigned int max_epochs,
                               unsigned int epochs_between_reports, float desired_error,
                               unsigned int epochs)
@@ -36,7 +45,8 @@ int FANN_API internalCallback(fann *ann, fann_train_data *train, unsigned int ma
             //test
 
         }
-    ::Sleep(100);
+    //::Sleep(100);
+    SleeperThread::msleep(100);
     if( QThread::currentThread()->priority() != QThread::IdlePriority )
         QThread::currentThread()->setPriority(QThread::IdlePriority);
     return 0;
@@ -523,7 +533,7 @@ QVector<uint> NeuralNetwork::numNeuronsHidden()
     return m_num_neurons_hidden;
 }
 
-void NeuralNetwork::setNumNeuronsHidden(QVector<uint> &numNeuronsHidden)
+void NeuralNetwork::setNumNeuronsHidden(QVector<uint> numNeuronsHidden)
 {
     this->m_num_neurons_hidden = numNeuronsHidden;
 }

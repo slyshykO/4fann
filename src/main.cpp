@@ -7,6 +7,7 @@
 #include <QApplication>
 #include <QTextCodec>
 #include <QThreadPool>
+#include <locale.h>
 
 #include "mainwindow.hpp"
 
@@ -20,7 +21,7 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_WIN32
             QTextCodec::setCodecForLocale(QTextCodec::codecForName("CP-866"));
 #endif
-
+            setlocale( LC_NUMERIC, "C" );
             MainWindow w;
             w.show();
             app_res =  a.exec();
