@@ -17,10 +17,6 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     try
         {
-            QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-#ifdef Q_OS_WIN32
-            QTextCodec::setCodecForLocale(QTextCodec::codecForName("CP-866"));
-#endif
             setlocale( LC_NUMERIC, "C" );
             MainWindow w;
             w.show();

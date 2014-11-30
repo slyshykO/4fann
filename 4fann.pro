@@ -4,11 +4,13 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui widgets concurrent
+CONFIG += c++11
 
 TEMPLATE = app
 DESTDIR = ./bin
 UI_HEADERS_DIR = build
+UI_DIR         = build
 RCC_DIR        = build
 
 CONFIG(debug, debug|release) {
@@ -27,36 +29,15 @@ include(src/plot/plot.pri)
 
 # ==================== Подключаем Qwt ==============================
 #QWT_ROOT - Переменная окружения, должна указывать директорию проекта Qwt
-include( $$(QWT_ROOT)/qwtconfig.pri )
-contains(QWT_CONFIG, QwtDll) {
-    CONFIG += dll
-    win32|symbian: DEFINES += QT_DLL QWT_DLL
-}
-else {
-    CONFIG += staticlib
-}
-
-INCLUDEPATH += $$(QWT_ROOT)/src
-DEPENDPATH  += $$(QWT_ROOT)/src
-
-contains(QWT_CONFIG, QwtFramework) {
-
-    LIBS      += -F$$(QWT_ROOT)/lib
-}
-else {
-
-    LIBS      += -L$$(QWT_ROOT)/lib
-}
-IPATH       = $${INCLUDEPATH}
-qtAddLibrary(qwt)
-INCLUDEPATH = $${IPATH}
-contains(QWT_CONFIG, QwtSvg) {
-    QT += svg
-}
-else {
-    DEFINES += QWT_NO_SVG
-}
 # =============================== Qwt ==============================
+CONFIG(debug, debug|release) {
+LIBS += -lqwtd
+}
+else{
+LIBS += -lqwt
+}
+INCLUDEPATH += $$(QWT_ROOT)/src
+LIBS += -L$$(QWT_ROOT)/lib
 
 # ==================== Подключаем FANN ==============================
 #FANN_DIR - Переменная окружения, должна указывать директорию проекта FANN
@@ -72,8 +53,7 @@ CONFIG(debug, debug|release) {
 # ==============================  FANN ==============================
 
 unix:{
-qtAddLibrary(doublefann)
-QMAKE_CXXFLAGS += -std=c++0x
+LIBS += -lfann
 }
 
 #win32:RC_FILE = mystery_ai.rc

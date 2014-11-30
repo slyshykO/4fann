@@ -7,7 +7,7 @@
 #ifndef NETPANEL_HPP
 #define NETPANEL_HPP
 
-#include <QtGui/QWidget>
+#include <QWidget>
 
 
 //trainEdit;

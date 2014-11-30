@@ -20,7 +20,7 @@
 #include <QObject>
 #include <QEvent>
 #include <QMouseEvent>
-#include "qwt_plot.h"
+#include <qwt_plot.h>
 #include <qwt_plot_canvas.h>
 
 class QwtChartZoom : public QObject

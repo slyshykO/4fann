@@ -443,3 +443,4 @@ void QwtChartZoom::restBounds()
     // перерисовываем график
     qwtp->replot();
 }
+

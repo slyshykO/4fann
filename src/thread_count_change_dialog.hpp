@@ -7,7 +7,7 @@
 #ifndef THREAD_COUNT_CHANGE_DIALOG_HPP
 #define THREAD_COUNT_CHANGE_DIALOG_HPP
 
-#include <QtGui/QDialog>
+#include <QDialog>
 
 namespace Ui {
 class ThreadCountChangeDialog;
