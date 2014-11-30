@@ -71,8 +71,6 @@ void NetTrainView::setTestMSEData(const QVector<float> &data, const QVector<uint
     for(int i = 0; i < data.size(); i++)
         crv.append(QPointF(steps[i],data[i]));
 
-    qDebug()<<__FUNCTION__;
-    qDebug()<<data;
     m_msePlot->curve(1)->setSamples(crv);
     m_msePlot->replot();
 }

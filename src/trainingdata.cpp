@@ -11,13 +11,12 @@
 TrainingData::TrainingData()
     :m_train_data(0)
 {
-    qDebug()<<__FUNCTION__<<"()";
+
 }
 
 TrainingData::TrainingData(const TrainingData &data)
     :m_train_data(0)
 {
-    qDebug()<<__FUNCTION__<<"(const TrainingData &data)";
     destroyData();
     if (data.m_train_data != NULL)
     {
@@ -28,7 +27,6 @@ TrainingData::TrainingData(const TrainingData &data)
 
 TrainingData & TrainingData::operator= (const TrainingData &data)
 {
-    qDebug()<<__FUNCTION__;
     if( this != &data)
         {
             destroyData();
@@ -44,7 +42,6 @@ TrainingData & TrainingData::operator= (const TrainingData &data)
 TrainingData::~TrainingData()
 {
     destroyData();
-    qDebug()<<"destroy TrainingData";
 }
 
 bool TrainingData::isNull()

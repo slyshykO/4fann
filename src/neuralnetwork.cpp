@@ -368,7 +368,6 @@ void NeuralNetwork::detectMinAnn()
 
 void NeuralNetwork::trainFinished()
 {
-    qDebug()<<__FUNCTION__;
     //save ann
 
     QFileInfo fileInfo;
@@ -425,19 +424,18 @@ void NeuralNetwork::trainFinished()
 
 void NeuralNetwork::trainStarted()
 {
-    qDebug()<<__FUNCTION__;
+
 }
 
 void NeuralNetwork::trainPaused()
 {
-    qDebug()<<__FUNCTION__;
     setState(WaitTraining);
 }
 
 /** \fn NeuralNetwork::run (fann_type *fInput) */
 fann_type *NeuralNetwork::run( fann_type *fInput)
 {
-    fann_type *fOutput;
+    fann_type *fOutput = NULL;
     if ( m_ann != NULL )
         {
             fOutput = fann_run( m_ann, fInput );

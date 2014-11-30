@@ -66,7 +66,6 @@ void MainWindow::createActions()
 
 void MainWindow::changeMaxThreadCount()
 {
-    qDebug()<<__FUNCTION__;
     ThreadCountChangeDialog dialog;
     if(dialog.exec())
         {
@@ -141,7 +140,6 @@ void MainWindow::startTraining()
                     net->setTestFileName(panel->testFileName());
 
                     TrainingData * trainingData = new TrainingData();
-                    qDebug()<<"create data";
 
                     if ( net->initAnn() )
                         {
