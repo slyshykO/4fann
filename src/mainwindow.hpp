@@ -13,7 +13,7 @@
 #include "neuralnetwork.hpp"
 #include "netproject.hpp"
 
-QT_FORWARD_DECLARE_CLASS(StartTrainAnnDialog)
+class StartTrainAnnDialog;
 
 class MainWindow : public QMainWindow
 {

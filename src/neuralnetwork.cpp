@@ -125,6 +125,8 @@ bool NeuralNetwork::isNull()
 
 bool NeuralNetwork::initAnn()
 {
+    if(m_num_input == 0)
+        return false;
     annDestroy();
     unsigned int *layers = new unsigned int[this->numHiddenLayers() + 2];
 

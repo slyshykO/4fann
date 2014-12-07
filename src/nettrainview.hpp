@@ -9,8 +9,8 @@
 
 #include <QWidget>
 
-QT_FORWARD_DECLARE_CLASS(TPlot)
-QT_FORWARD_DECLARE_CLASS(QTextEdit)
+class TPlot;
+class QTextEdit;
 
 
 class NetTrainView : public QWidget

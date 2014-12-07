@@ -13,7 +13,9 @@
 
 NetPanel::NetPanel(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::NetPanel)
+    ui(new Ui::NetPanel),
+    m_numInput(0),
+    m_numOutput(0)
 {
     ui->setupUi(this);
     initControls();

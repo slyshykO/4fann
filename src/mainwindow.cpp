@@ -123,7 +123,7 @@ void MainWindow::startTraining()
             NetPanel * panel = m_startDialog->panel();
             if ( panel )
                 {
-                    NeuralNetwork * net = new NeuralNetwork();
+                    NeuralNetwork* net = new NeuralNetwork();
                     net->setNetType(panel->netType());
                     net->setNumInput(panel->numInput());
                     net->setNumOutput(panel->numOutput());

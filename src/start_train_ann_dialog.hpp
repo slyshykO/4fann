@@ -9,7 +9,7 @@
 
 #include <QDialog>
 
-QT_FORWARD_DECLARE_CLASS(NetPanel)
+class NetPanel;
 
 class StartTrainAnnDialog : public QDialog
 {
