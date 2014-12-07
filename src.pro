@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui widgets concurrent
+QT       += core gui widgets concurrent printsupport
 CONFIG += c++11
 
 TEMPLATE = app
@@ -68,7 +68,8 @@ SOURCES += \
     src/trainingdata.cpp \
     src/start_train_ann_dialog.cpp \
     src/nettrainview.cpp \
-    src/thread_count_change_dialog.cpp
+    src/thread_count_change_dialog.cpp \
+    3rdparty/qcustomplot-source/qcustomplot.cpp
 
 HEADERS += \
     src/mainwindow.hpp \
@@ -78,7 +79,8 @@ HEADERS += \
     src/trainingdata.hpp \
     src/start_train_ann_dialog.hpp \
     src/nettrainview.hpp \
-    src/thread_count_change_dialog.hpp
+    src/thread_count_change_dialog.hpp \
+    3rdparty/qcustomplot-source/qcustomplot.h
 
 FORMS += \
     src/ui/netpanel.ui \
