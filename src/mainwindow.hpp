@@ -20,6 +20,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 public:
     explicit MainWindow(QWidget *parent = 0);
+protected:
+    void closeEvent(QCloseEvent * event);
+    void saveWndState();
+    void loadWndState();
 private slots:
     void newTrening();
     void startTraining();

@@ -14,6 +14,8 @@
 int main(int argc, char *argv[])
 {
     int app_res;
+    QApplication::setOrganizationName("4fann");
+    QApplication::setApplicationName ("4fann_gui");
     QApplication a(argc, argv);
     try
         {

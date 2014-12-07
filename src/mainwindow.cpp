@@ -10,6 +10,8 @@
 #include <QDockWidget>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QCloseEvent>
+#include <QSettings>
 #include <QDebug>
 
 #include "netpanel.hpp"
@@ -25,12 +27,12 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     m_tabs = new QTabWidget(this);
     setCentralWidget(m_tabs);
-    resize(1000,700);
     createActions();
 
     m_taskList = new QListWidget();
     m_taskDock = new QDockWidget(tr("Training list"));
     m_taskDock->setWidget(m_taskList);
+    m_taskDock->setObjectName("m_taskDock");
     addDockWidget(Qt::LeftDockWidgetArea, m_taskDock, Qt::Vertical);
 
     m_startDialog = new StartTrainAnnDialog();
@@ -41,6 +43,31 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(m_taskList, SIGNAL(currentRowChanged(int)), this, SLOT(setCurrent(int)) );
     connect(m_tabs, SIGNAL(currentChanged(int)), this, SLOT(setCurrent(int)) );
 
+    loadWndState();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    saveWndState();
+    QMainWindow::closeEvent(event);
+}
+
+void MainWindow::saveWndState()
+{
+    QSettings settings;
+    settings.beginGroup("main_window");
+    settings.setValue("geometry", saveGeometry());
+    settings.setValue("windowState", saveState());
+    settings.endGroup();
+}
+
+void MainWindow::loadWndState()
+{
+    QSettings settings;
+    settings.beginGroup("main_window");
+    restoreGeometry(settings.value("geometry").toByteArray());
+    restoreState   (settings.value("windowState").toByteArray());
+    settings.endGroup();
 }
 
 void MainWindow::createActions()
@@ -59,6 +86,7 @@ void MainWindow::createActions()
 
 
     m_trainBar = new QToolBar(this);
+    m_trainBar->setObjectName("m_trainBar");
     m_trainBar->addAction(m_startTrainAct);
     m_trainBar->addAction(m_changeMaxThreadAct);
     addToolBar(Qt::TopToolBarArea, m_trainBar);
