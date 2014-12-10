@@ -5,3 +5,5 @@ build
 image/Thumbs.db
 *.pdb
 bin
+*.Release
+*.Debug

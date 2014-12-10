@@ -6,10 +6,11 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS += ./src.pro \
-           ./3rdparty/fanndouble/fanndouble.pro
+CONFIG += ordered
 
-src.pro.depends = fanndouble.pro
+SUBDIRS += ./3rdparty/fanndouble/fanndouble.pro \
+           ./src.pro
+
 
 #http://blog.rburchell.com/2013/10/every-time-you-configordered-kitten-dies.html
 #TEMPLATE = subdirs

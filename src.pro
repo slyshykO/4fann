@@ -45,9 +45,9 @@ INCLUDEPATH += ./3rdparty/fanndouble/fann/src/include
 LIBS +=      -L./3rdparty/fanndouble/fann/bin
 win32:{
 CONFIG(debug, debug|release) {
-    LIBS += -lfanndoubled
+    LIBS += -lfannd
 } else {
-    LIBS += -lfanndouble
+    LIBS += -lfann
 }
 }
 
