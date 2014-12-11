@@ -1,27 +1,27 @@
 /*
-* file   : traindata.cpp created 2012.3.11
-* class  : TrainData
-* author : Slyshyk Oleksiy ( alexSlyshyk@gmail.com )
-*/
+ * file   : traindata.cpp created 2012.3.11
+ * class  : TrainData
+ * author : Slyshyk Oleksiy ( alexSlyshyk@gmail.com )
+ */
 
 #include "trainingdata.hpp"
 #include <QFile>
 #include <QDebug>
 
 TrainingData::TrainingData()
-    :m_train_data(0)
+    : m_train_data(0)
 {
 
 }
 
-TrainingData::TrainingData(const TrainingData &data)
-    :m_train_data(0)
+TrainingData::TrainingData(const TrainingData &data )
+    : m_train_data(0)
 {
     destroyData();
     if (data.m_train_data != NULL)
-    {
-        m_train_data = fann_duplicate_train_data(data.m_train_data);
-    }
+        {
+            m_train_data = fann_duplicate_train_data(data.m_train_data);
+        }
     m_fileName = data.m_fileName;
 }
 
@@ -31,9 +31,9 @@ TrainingData & TrainingData::operator= (const TrainingData &data)
         {
             destroyData();
             if (data.m_train_data != NULL)
-            {
-                m_train_data = fann_duplicate_train_data(data.m_train_data);
-            }
+                {
+                    m_train_data = fann_duplicate_train_data(data.m_train_data);
+                }
             m_fileName = data.m_fileName;
         }
     return *this;
