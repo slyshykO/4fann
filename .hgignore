@@ -1,5 +1,4 @@
 syntax: glob
-*.user
 Makefile*
 build
 image/Thumbs.db
@@ -7,3 +6,4 @@ image/Thumbs.db
 bin
 *.Release
 *.Debug
+*.user*
