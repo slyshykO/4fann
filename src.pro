@@ -25,19 +25,7 @@ else {
     MOC_DIR = build/release
 }
 
-include(src/plot/plot.pri)
-
-# ==================== Подключаем Qwt ==============================
-#QWT_ROOT - Переменная окружения, должна указывать директорию проекта Qwt
-# =============================== Qwt ==============================
-CONFIG(debug, debug|release) {
-LIBS += -lqwtd
-}
-else{
-LIBS += -lqwt
-}
-INCLUDEPATH += $$(QWT_ROOT)/src
-LIBS += -L$$(QWT_ROOT)/lib
+INCLUDEPATH += 3rdparty/qcustomplot-source
 
 # ==================== Подключаем FANN ==============================
 #FANN_DIR - Переменная окружения, должна указывать директорию проекта FANN

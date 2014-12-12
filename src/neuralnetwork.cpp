@@ -910,9 +910,9 @@ void NeuralNetwork::addToHistory(float mse, uint bitFail, uint epochs)
     emit stateChanged(static_cast<int>(m_state));
 }
 
-QVector<float> NeuralNetwork::mseHistory()
+QVector<double> NeuralNetwork::mseHistory()
 {
-    QVector<float> res;
+    QVector<double> res;
     {
         QMutexLocker locker(&m_mutex);
         res.resize(m_mseHistory.size());
@@ -921,9 +921,9 @@ QVector<float> NeuralNetwork::mseHistory()
     return res;
 }
 
-QVector<uint> NeuralNetwork::bitFailHistory()
+QVector<double> NeuralNetwork::bitFailHistory()
 {
-    QVector<uint> res;
+    QVector<double> res;
     {
         QMutexLocker locker(&m_mutex);
         res.resize(m_bitFailHistory.size());
@@ -932,9 +932,9 @@ QVector<uint> NeuralNetwork::bitFailHistory()
     return res;
 }
 
-QVector<float> NeuralNetwork::mseTestHistory()
+QVector<double> NeuralNetwork::mseTestHistory()
 {
-    QVector<float> res;
+    QVector<double> res;
     {
         QMutexLocker locker(&m_mutex);
         res.resize(m_mseTestHistory.size());
@@ -943,9 +943,9 @@ QVector<float> NeuralNetwork::mseTestHistory()
     return res;
 }
 
-QVector<uint> NeuralNetwork::bitFailTestHistory()
+QVector<double> NeuralNetwork::bitFailTestHistory()
 {
-    QVector<uint> res;
+    QVector<double> res;
     {
         QMutexLocker locker(&m_mutex);
         res.resize(m_bitFailTestHistory.size());
@@ -954,9 +954,9 @@ QVector<uint> NeuralNetwork::bitFailTestHistory()
     return res;
 }
 
-QVector<uint> NeuralNetwork::epochsHistory()
+QVector<double> NeuralNetwork::epochsHistory()
 {
-    QVector<uint> res;
+    QVector<double> res;
     {
         QMutexLocker locker(&m_mutex);
         res.resize(m_epochHistory.size());

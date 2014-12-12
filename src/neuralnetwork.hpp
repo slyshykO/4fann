@@ -148,11 +148,11 @@ public:
 public:
     // Потокобезопасные функции
     void addToHistory(float mse, uint bitFail, uint epochs);
-    QVector<float> mseHistory();
-    QVector<uint> bitFailHistory();
-    QVector<float> mseTestHistory();
-    QVector<uint> bitFailTestHistory();
-    QVector<uint> epochsHistory();
+    QVector<double> mseHistory();
+    QVector<double> bitFailHistory();
+    QVector<double> mseTestHistory();
+    QVector<double> bitFailTestHistory();
+    QVector<double> epochsHistory();
     int epoch();
     int state();
 

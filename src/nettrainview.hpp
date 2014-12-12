@@ -9,7 +9,7 @@
 
 #include <QWidget>
 
-class TPlot;
+class QCustomPlot;
 class QTextEdit;
 
 
@@ -20,13 +20,13 @@ public:
     explicit NetTrainView(QWidget *parent = 0);
 
     void setNetText(const QString & txt);
-    void setMSEData(const QVector<float> & , const QVector<uint> & );
-    void setBitFailData(const QVector<uint> & , const QVector<uint> & );
-    void setTestMSEData(const QVector<float> & , const QVector<uint> & );
-    void setTestBitFailData(const QVector<uint> & , const QVector<uint> & );
+    void setMSEData(const QVector<double> & , const QVector<double> & );
+    void setBitFailData(const QVector<double> & , const QVector<double> & );
+    void setTestMSEData(const QVector<double> & , const QVector<double> & );
+    void setTestBitFailData(const QVector<double> & , const QVector<double> & );
 private:
-    TPlot * m_msePlot;
-    TPlot * m_bitFailPlot;
+    QCustomPlot * m_msePlot;
+    QCustomPlot * m_bitFailPlot;
 
     QTextEdit * m_netText;
 };

@@ -8,20 +8,26 @@
 #include <QDebug>
 #include <QTextEdit>
 #include <QBoxLayout>
-#include <plot.hpp>
+#include <qcustomplot.h>
 
 NetTrainView::NetTrainView(QWidget *parent) :
     QWidget(parent)
 {
-    m_msePlot     = new TPlot(this);
-    m_bitFailPlot = new TPlot(this);
+    m_msePlot     = new QCustomPlot(this);
+    m_bitFailPlot = new QCustomPlot(this);
     m_bitFailPlot->setMinimumSize(100,100);
     m_msePlot->setMinimumSize(100,100);
     m_msePlot->replot();
-    m_msePlot->addCurve(tr("MSE"), QVector<QPointF>());
-    m_msePlot->addCurve(tr("Test MSE"), QVector<QPointF>());
-    m_bitFailPlot->addCurve(tr("Bit fail"), QVector<QPointF>());
-    m_bitFailPlot->addCurve(tr("Test Bit fail"), QVector<QPointF>());
+    m_msePlot->addGraph();
+    m_msePlot->addGraph();
+    m_bitFailPlot->addGraph();
+    m_bitFailPlot->addGraph();
+    m_bitFailPlot->replot();
+
+//    m_msePlot->addCurve(tr("MSE"), QVector<QPointF>());
+//    m_msePlot->addCurve(tr("Test MSE"), QVector<QPointF>());
+//    m_bitFailPlot->addCurve(tr("Bit fail"), QVector<QPointF>());
+//    m_bitFailPlot->addCurve(tr("Test Bit fail"), QVector<QPointF>());
 
     m_netText = new QTextEdit(this);
     //m_netText->setMaximumSize(150,150);
@@ -45,42 +51,26 @@ void NetTrainView::setNetText(const QString &txt)
     m_netText->setText(txt);
 }
 
-void NetTrainView::setMSEData(const QVector<float> & data, const QVector<uint> &steps)
+void NetTrainView::setMSEData(const QVector<double> & data, const QVector<double> &steps)
 {
-    QVector<QPointF> crv;
-    for(int i = 0; i < data.size(); i++)
-        crv.append(QPointF(steps[i],data[i]));
-
-    m_msePlot->curve(0)->setSamples(crv);
+    m_msePlot->graph(0)->setData(steps,data);
     m_msePlot->replot();
 }
 
-void NetTrainView::setBitFailData(const QVector<uint> & data, const QVector<uint> &steps)
+void NetTrainView::setBitFailData(const QVector<double> &data, const QVector<double> &steps)
 {
-    QVector<QPointF> crv;
-    for(int i = 0; i < data.size(); i++)
-        crv.append(QPointF(steps[i],data[i]));
-
-    m_bitFailPlot->curve(0)->setSamples(crv);
+    m_bitFailPlot->graph(0)->setData(steps,data);
     m_bitFailPlot->replot();
 }
 
-void NetTrainView::setTestMSEData(const QVector<float> &data, const QVector<uint> &steps)
+void NetTrainView::setTestMSEData(const QVector<double> &data, const QVector<double> &steps)
 {
-    QVector<QPointF> crv;
-    for(int i = 0; i < data.size(); i++)
-        crv.append(QPointF(steps[i],data[i]));
-
-    m_msePlot->curve(1)->setSamples(crv);
+    m_msePlot->graph(1)->setData(steps,data);
     m_msePlot->replot();
 }
 
-void NetTrainView::setTestBitFailData(const QVector<uint> &data, const QVector<uint> &steps)
+void NetTrainView::setTestBitFailData(const QVector<double> &data, const QVector<double> &steps)
 {
-    QVector<QPointF> crv;
-    for(int i = 0; i < data.size(); i++)
-        crv.append(QPointF(steps[i],data[i]));
-
-    m_bitFailPlot->curve(1)->setSamples(crv);
+    m_bitFailPlot->graph(1)->setData(steps,data);
     m_bitFailPlot->replot();
 }
