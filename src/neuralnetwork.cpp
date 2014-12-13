@@ -42,10 +42,11 @@ int FANN_API internalCallback(fann *ann, fann_train_data *train, unsigned int ma
 
             net->detectMinAnn();
             net->addToHistory(fann_get_MSE(ann), fann_get_bit_fail(ann), epochs);
-            //test
 
+            if(net->needStop())
+                return -1;
         }
-    //::Sleep(100);
+
     SleeperThread::msleep(100);
     if( QThread::currentThread()->priority() != QThread::IdlePriority )
         QThread::currentThread()->setPriority(QThread::IdlePriority);
@@ -116,6 +117,27 @@ void NeuralNetwork::annDestroy()
             fann_destroy(m_minTrainAnn);
             m_minTrainAnn = 0;
         }
+}
+
+void NeuralNetwork::setNeedStop(bool s)
+{
+    QMutexLocker lock(&need_stop_mutex_);
+    need_stop_ = s;
+}
+
+bool NeuralNetwork::needStop()
+{
+    bool res = false;
+    {
+        QMutexLocker lock(&need_stop_mutex_);
+        res = need_stop_;
+    }
+    return res;
+}
+
+void NeuralNetwork::stopTraining()
+{
+    setNeedStop(true);
 }
 
 bool NeuralNetwork::isNull()

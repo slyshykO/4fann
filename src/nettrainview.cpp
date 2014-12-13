@@ -28,9 +28,13 @@ NetTrainView::NetTrainView(QWidget *parent) :
 //    m_msePlot->addCurve(tr("Test MSE"), QVector<QPointF>());
 //    m_bitFailPlot->addCurve(tr("Bit fail"), QVector<QPointF>());
 //    m_bitFailPlot->addCurve(tr("Test Bit fail"), QVector<QPointF>());
+    m_msePlot->graph(0)->setPen(QPen(QColor("red")));
+    m_msePlot->graph(1)->setPen(QPen(QColor("blue")));
+
+    m_bitFailPlot->graph(0)->setPen(QPen(QColor("cyan")));
+    m_bitFailPlot->graph(1)->setPen(QPen(QColor("magenta")));
 
     m_netText = new QTextEdit(this);
-    //m_netText->setMaximumSize(150,150);
     m_netText->setMaximumWidth(500);
 
     QVBoxLayout * plot_layout = new QVBoxLayout();
@@ -54,23 +58,27 @@ void NetTrainView::setNetText(const QString &txt)
 void NetTrainView::setMSEData(const QVector<double> & data, const QVector<double> &steps)
 {
     m_msePlot->graph(0)->setData(steps,data);
+    m_msePlot->graph(0)->rescaleAxes();
     m_msePlot->replot();
 }
 
 void NetTrainView::setBitFailData(const QVector<double> &data, const QVector<double> &steps)
 {
     m_bitFailPlot->graph(0)->setData(steps,data);
+    m_bitFailPlot->graph(0)->rescaleAxes();
     m_bitFailPlot->replot();
 }
 
 void NetTrainView::setTestMSEData(const QVector<double> &data, const QVector<double> &steps)
 {
     m_msePlot->graph(1)->setData(steps,data);
+    m_msePlot->graph(1)->rescaleAxes(true);
     m_msePlot->replot();
 }
 
 void NetTrainView::setTestBitFailData(const QVector<double> &data, const QVector<double> &steps)
 {
     m_bitFailPlot->graph(1)->setData(steps,data);
+    m_bitFailPlot->graph(1)->rescaleAxes(true);
     m_bitFailPlot->replot();
 }

@@ -13,6 +13,7 @@
 #include <QCloseEvent>
 #include <QSettings>
 #include <QDebug>
+#include <QApplication>
 
 #include "netpanel.hpp"
 #include "trainingdata.hpp"
@@ -124,6 +125,7 @@ void MainWindow::startTraining()
             if ( panel )
                 {
                     NeuralNetwork* net = new NeuralNetwork();
+                    connect(qApp, SIGNAL(aboutToQuit()), net, SLOT(stopTraining()) );
                     net->setNetType(panel->netType());
                     net->setNumInput(panel->numInput());
                     net->setNumOutput(panel->numOutput());

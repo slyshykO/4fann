@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
             setlocale( LC_NUMERIC, "C" );
             MainWindow w;
             w.show();
+            a.setQuitOnLastWindowClosed(true);
             app_res =  a.exec();
         }
     catch(...)

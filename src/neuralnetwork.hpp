@@ -259,6 +259,14 @@ private:
    void annDestroy();
 
    friend class NetTraining;
+private:
+   QMutex need_stop_mutex_;
+   bool   need_stop_ = false;
+public:
+   void setNeedStop(bool s);
+   bool needStop();
+public slots:
+   void stopTraining();
 };
 
 /* Type: fann_callback_type
