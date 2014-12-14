@@ -59,6 +59,8 @@ class NetPanel : public QWidget
 public:
     explicit NetPanel(QWidget *parent = 0);
     ~NetPanel();
+    void loadSettings();
+    void saveSettings();
 
     QVector<uint> hiddenLayers() const;
     uint numInput() const;
@@ -117,6 +119,8 @@ private:
     Ui::NetPanel *ui;
     uint m_numInput;
     uint m_numOutput;
+
+    QString last_opened_data_dir_;
 };
 
 #endif // NETPANEL_HPP

@@ -10,6 +10,9 @@
 #include <doublefann.h>
 #include <QFileDialog>
 #include <QTextStream>
+#include <QSettings>
+#include <QFileInfo>
+#include <QDir>
 
 NetPanel::NetPanel(QWidget *parent) :
     QWidget(parent),
@@ -18,12 +21,30 @@ NetPanel::NetPanel(QWidget *parent) :
     m_numOutput(0)
 {
     ui->setupUi(this);
+    loadSettings();
     initControls();
 }
 
 NetPanel::~NetPanel()
 {
+    saveSettings();
     delete ui;
+}
+
+void NetPanel::loadSettings()
+{
+    QSettings s;
+    s.beginGroup("netpanel");
+    last_opened_data_dir_ = s.value("last_opened_dir","./").toString();
+    s.endGroup();
+}
+
+void NetPanel::saveSettings()
+{
+    QSettings s;
+    s.beginGroup("netpanel");
+    s.setValue("last_opened_dir",QVariant(last_opened_data_dir_));
+    s.endGroup();
 }
 
 QVector<uint> NetPanel::hiddenLayers() const
@@ -237,7 +258,7 @@ uint NetPanel::numberOfCandidateGroups() const
 void NetPanel::openTrainFile()
 {
     QString fileName;
-    fileName = QFileDialog::getOpenFileName(0,tr("Open trainibg data file"));
+    fileName = QFileDialog::getOpenFileName(this,tr("Open trainibg data file"),last_opened_data_dir_);
     ui->trainEdit->setText(fileName);
     if( !fileName.isNull() )
         {
@@ -251,8 +272,22 @@ void NetPanel::openTrainFile()
                     if(ui->hiddenLayers->columnCount() == 0)
                         addHidden(head[1]);
                 }
+            QFileInfo fi(fileName);
+            last_opened_data_dir_ = fi.dir().absolutePath();
         }
 
+}
+
+void NetPanel::openTestFile()
+{
+    QString fileName;
+    fileName = QFileDialog::getOpenFileName(this,tr("Open test data file"),last_opened_data_dir_);
+    if( !fileName.isNull() )
+        {
+            ui->testEdit->setText(fileName);
+            QFileInfo fi(fileName);
+            last_opened_data_dir_ = fi.dir().absolutePath();
+        }
 }
 
 QVector<int> NetPanel::readTrainHead(const QString &fn)
@@ -273,13 +308,6 @@ QVector<int> NetPanel::readTrainHead(const QString &fn)
                 }
         }
     return res;
-}
-
-void NetPanel::openTestFile()
-{
-    QString fileName;
-    fileName = QFileDialog::getOpenFileName(0,tr("Open test data file"));
-    ui->testEdit->setText(fileName);
 }
 
 void NetPanel::openSaveDir()
@@ -323,20 +351,20 @@ void NetPanel::addHidden(int q)
 
 void NetPanel::initControls()
 {
-    for(int i = 0; i < 2; ++i)
+    for(int i = 0; i < FANN_NETTYPE_SHORTCUT+1; ++i)
         {
             ui->netTypeCombo->addItem(tr(FANN_NETTYPE_NAMES[i]));
         }
-    for(int i = 0; i < 2; ++i)
+    for(int i = 0; i < FANN_ERRORFUNC_TANH+1; ++i)
         {
             ui->errorFuncCombo->addItem(tr(FANN_ERRORFUNC_NAMES[i]));
 
         }
-    for(int i = 0; i < 2; ++i)
+    for(int i = 0; i < FANN_STOPFUNC_BIT+1; ++i)
         {
             ui->stopFuncCombo->addItem(tr(FANN_STOPFUNC_NAMES[i]));
         }
-    for(int i = 0; i < 18; ++i)
+    for(int i = 0; i < FANN_COS + 1; ++i)
         {
             ui->activationFuncHiddenCombo->addItem(tr(FANN_ACTIVATIONFUNC_NAMES[i]));
             ui->activationFuncOutputCombo->addItem(tr(FANN_ACTIVATIONFUNC_NAMES[i]));
