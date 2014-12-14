@@ -24,7 +24,7 @@ StartTrainAnnDialog::StartTrainAnnDialog(QWidget *parent) :
     layout->addWidget(buttonBox);
 }
 
-NetPanel *StartTrainAnnDialog::panel()
+const NetPanel *StartTrainAnnDialog::panel() const
 {
     return m_panel;
 }

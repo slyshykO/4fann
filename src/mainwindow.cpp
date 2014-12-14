@@ -121,7 +121,7 @@ void MainWindow::startTraining()
     //StartTrainAnnDialog dialog;
     if( m_startDialog->exec())
         {
-            NetPanel * panel = m_startDialog->panel();
+            const NetPanel * panel = m_startDialog->panel();
             if ( panel )
                 {
                     NeuralNetwork* net = new NeuralNetwork();

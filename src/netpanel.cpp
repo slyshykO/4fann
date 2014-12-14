@@ -26,7 +26,7 @@ NetPanel::~NetPanel()
     delete ui;
 }
 
-QVector<uint> NetPanel::hiddenLayers()
+QVector<uint> NetPanel::hiddenLayers() const
 {
     QVector<uint> res;
     for(int i = 0 ; i < ui->hiddenLayers->columnCount(); ++i)
@@ -38,197 +38,197 @@ QVector<uint> NetPanel::hiddenLayers()
     return res;
 }
 
-uint NetPanel::numInput()
+uint NetPanel::numInput() const
 {
     return m_numInput;
 }
 
-uint NetPanel::numOutput()
+uint NetPanel::numOutput() const
 {
     return m_numOutput;
 }
 
-uint NetPanel::netType()
+uint NetPanel::netType() const
 {
     return ui->netTypeCombo->currentIndex();
 }
 
-uint NetPanel::stopFuncType()
+uint NetPanel::stopFuncType() const
 {
     return ui->stopFuncCombo->currentIndex();
 }
 
-uint NetPanel::errorFunkType()
+uint NetPanel::errorFunkType() const
 {
     return ui->errorFuncCombo->currentIndex();
 }
 
-uint NetPanel::traingMethod()
+uint NetPanel::traingMethod() const
 {
     return ui->trainMethodCombo->currentIndex();
 }
 
-uint NetPanel::activationHiddens()
+uint NetPanel::activationHiddens() const
 {
     return ui->activationFuncHiddenCombo->currentIndex();
 }
 
-uint NetPanel::activationOutputs()
+uint NetPanel::activationOutputs() const
 {
     return ui->activationFuncOutputCombo->currentIndex();
 }
 
-uint NetPanel::maxEpochs()
+uint NetPanel::maxEpochs() const
 {
     return ui->epochSpin->value();
 }
 
-uint NetPanel::epochsBetweenReports()
+uint NetPanel::epochsBetweenReports() const
 {
     return ui->reportSpin->value();
 }
 
-float NetPanel::desiredError()
+float NetPanel::desiredError() const
 {
     return ui->desiredMSESpin->value();
 }
 
-double NetPanel::bitFailLimit()
+double NetPanel::bitFailLimit()  const
 {
     return ui->bitFailLimitSpin->value();
 }
 
-bool NetPanel::isNormalTrain()
+bool NetPanel::isNormalTrain()  const
 {
     return ui->normalTrainRadioBtn->isChecked();
 }
 
-QString NetPanel::trainingFileName()
+QString NetPanel::trainingFileName() const
 {
     return ui->trainEdit->text();
 }
 
-QString NetPanel::testFileName()
+QString NetPanel::testFileName() const
 {
     return ui->testEdit->text();
 }
 
-QString NetPanel::saveDirName()
+QString NetPanel::saveDirName() const
 {
     return ui->saveDirEdit->text();
 }
 
-double NetPanel::connectionRate()
+double NetPanel::connectionRate() const
 {
     return ui->connectionRateSpin->value();
 }
 
-double NetPanel::hiddenActivationSteppness()
+double NetPanel::hiddenActivationSteppness() const
 {
     return ui->hiddenActivationSteppnessSpin->value();
 }
 
-double NetPanel::outputActivationSteppness()
+double NetPanel::outputActivationSteppness() const
 {
     return ui->outputActivationStepnessSpin->value();
 }
 
-double NetPanel::quickPropDecayFactor()
+double NetPanel::quickPropDecayFactor() const
 {
     return ui->quickPropDecayFactorSpin->value();
 }
 
-double NetPanel::RPROPIncreaseFactor()
+double NetPanel::RPROPIncreaseFactor() const
 {
     return ui->RPROPIncreaseFactorSpin->value();
 }
 
-bool NetPanel::initWeights()
+bool NetPanel::initWeights() const
 {
     return ui->initWeights->checkState();
 }
 
-double NetPanel::learningRate()
+double NetPanel::learningRate() const
 {
     return ui->learningRateSpin->value();
 }
 
-double NetPanel::quickPropMuFactor()
+double NetPanel::quickPropMuFactor() const
 {
     return ui->quickPropMuFactorSpin->value();
 }
 
-double NetPanel::RPROPDecreaseFactor()
+double NetPanel::RPROPDecreaseFactor() const
 {
     return ui->RPROPDecreaseFactorSpin->value();
 }
 
-bool NetPanel::shuffleTrainData()
+bool NetPanel::shuffleTrainData() const
 {
     return ui->shuffleTrainData->checkState();
 }
 
-double NetPanel::momentum()
+double NetPanel::momentum() const
 {
     return ui->momentumSpin->value();
 }
 
-uint NetPanel::RPROPMinStep()
+uint NetPanel::RPROPMinStep() const
 {
     return ui->RPROPMinStepSpin->value();
 }
 
-uint NetPanel::RPROPMaxStep()
+uint NetPanel::RPROPMaxStep() const
 {
     return ui->RPROPMaxStepSpin->value();
 }
 
-uint NetPanel::maxNumberOfNeurons()
+uint NetPanel::maxNumberOfNeurons() const
 {
     return ui->maxNumberOfNeuronsSpin->value();
 }
 
-double NetPanel::outputChangeFraction()
+double NetPanel::outputChangeFraction() const
 {
     return ui->outputChangeFractionSpin->value();
 }
 
-uint NetPanel::outputStagnationEpochs()
+uint NetPanel::outputStagnationEpochs() const
 {
     return ui->outputStagnationEpochsSpin->value();
 }
 
-double NetPanel::weightMultiplier()
+double NetPanel::weightMultiplier() const
 {
     return ui->weightMultiplierSpin->value();
 }
 
-double NetPanel::candidateChangeFraction()
+double NetPanel::candidateChangeFraction() const
 {
     return ui->candidateChangeFractionSpin->value();
 }
 
-uint NetPanel::candidateStagnationEpochs()
+uint NetPanel::candidateStagnationEpochs() const
 {
     return ui->candidateStagnationEpochsSpin->value();
 }
 
-uint NetPanel::candidateLimit()
+uint NetPanel::candidateLimit() const
 {
     return ui->candidateLimitSpin->value();
 }
 
-uint NetPanel::maximumOutEpochs()
+uint NetPanel::maximumOutEpochs() const
 {
     return ui->maximumOutEpochsSpin->value();
 }
 
-uint NetPanel::maximumCandidateEpochs()
+uint NetPanel::maximumCandidateEpochs() const
 {
     return ui->maximumCandidateEpochsSpin->value();
 }
 
-uint NetPanel::numberOfCandidateGroups()
+uint NetPanel::numberOfCandidateGroups() const
 {
     return ui->numberOfCandidateGroupsSpin->value();
 }

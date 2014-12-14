@@ -17,7 +17,7 @@ class StartTrainAnnDialog : public QDialog
 public:
     explicit StartTrainAnnDialog(QWidget *parent = 0);
 
-    NetPanel * panel();
+    const NetPanel * panel() const ;
 private:
     NetPanel * m_panel;
 
