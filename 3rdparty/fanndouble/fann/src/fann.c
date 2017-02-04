@@ -1,6 +1,6 @@
 /*
   Fast Artificial Neural Network Library (fann)
-  Copyright (C) 2003-2012 Steffen Nissen (sn@leenissen.dk)
+  Copyright (C) 2003-2016 Steffen Nissen (steffen.fann@gmail.com)
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -139,10 +139,7 @@ FANN_EXTERNAL struct fann *FANN_API fann_create_sparse_array(float connection_ra
 		connection_rate = 1;
 	}
 
-	/* seed random */
-#ifndef FANN_NO_SEED
 	fann_seed_rand();
-#endif
 
 	/* allocate the general structure */
 	ann = fann_allocate_structure(num_layers);
@@ -441,10 +438,7 @@ FANN_EXTERNAL struct fann *FANN_API fann_create_shortcut_array(unsigned int num_
 #ifdef FIXEDFANN
 	unsigned int multiplier;
 #endif
-	/* seed random */
-#ifndef FANN_NO_SEED
 	fann_seed_rand();
-#endif
 
 	/* allocate the general structure */
 	ann = fann_allocate_structure(num_layers);
@@ -910,6 +904,8 @@ FANN_EXTERNAL struct fann* FANN_API fann_copy(struct fann* orig)
     copy->train_stop_function = orig->train_stop_function;
 	copy->training_algorithm = orig->training_algorithm;
     copy->callback = orig->callback;
+	copy->user_data = orig->user_data;
+#ifndef FIXEDFANN
     copy->cascade_output_change_fraction = orig->cascade_output_change_fraction;
     copy->cascade_output_stagnation_epochs = orig->cascade_output_stagnation_epochs;
     copy->cascade_candidate_change_fraction = orig->cascade_candidate_change_fraction;
@@ -919,7 +915,6 @@ FANN_EXTERNAL struct fann* FANN_API fann_copy(struct fann* orig)
     copy->cascade_weight_multiplier = orig->cascade_weight_multiplier;
     copy->cascade_max_out_epochs = orig->cascade_max_out_epochs;
     copy->cascade_max_cand_epochs = orig->cascade_max_cand_epochs;
-	copy->user_data = orig->user_data;
 
    /* copy cascade activation functions */
     copy->cascade_activation_functions_count = orig->cascade_activation_functions_count;
@@ -964,6 +959,7 @@ FANN_EXTERNAL struct fann* FANN_API fann_copy(struct fann* orig)
         }
         memcpy(copy->cascade_candidate_scores,orig->cascade_candidate_scores,fann_get_cascade_num_candidates(copy) * sizeof(fann_type));
     }
+#endif /* FIXEDFANN */
 
     copy->quickprop_decay = orig->quickprop_decay;
     copy->quickprop_mu = orig->quickprop_mu;
@@ -1813,6 +1809,21 @@ void fann_allocate_connections(struct fann *ann)
 	}
 }
 
+#ifdef FANN_NO_SEED
+int FANN_SEED_RAND = 0;
+#else
+int FANN_SEED_RAND = 1;
+#endif
+
+FANN_EXTERNAL void FANN_API fann_disable_seed_rand()
+{
+    FANN_SEED_RAND = 0;
+}
+
+FANN_EXTERNAL void FANN_API fann_enable_seed_rand()
+{
+    FANN_SEED_RAND = 1;
+}
 
 /* INTERNAL FUNCTION
    Seed the random function.
@@ -1844,10 +1855,14 @@ void fann_seed_rand()
 		}
 		fclose(fp);
 	}
-	srand(foo);
+    if(FANN_SEED_RAND) {
+        srand(foo);
+    }
 #else
 	/* COMPAT_TIME REPLACEMENT */
-	srand(GetTickCount());
+    if(FANN_SEED_RAND) {
+    	srand(GetTickCount());
+    }
 #endif
 }
 

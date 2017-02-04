@@ -77,6 +77,8 @@ FORMS += \
 RESOURCES += \
     4fann.qrc
 
+DEFINES += FANN_NO_DLL
+
 unix:{
-QMAKE_RPATHDIR += $$(FANN_DIR)/bin $$(QWT_ROOT)/lib
+QMAKE_RPATHDIR += $$(FANN_DIR)/bin
 }

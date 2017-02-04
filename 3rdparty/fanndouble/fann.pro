@@ -39,5 +39,5 @@ SOURCES += \
     fann/src/doublefann.c
 
 
-DEFINES += DOUBLEFANN
+DEFINES += DOUBLEFANN FANN_NO_DLL
 
