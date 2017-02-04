@@ -7,3 +7,4 @@ bin
 *.Release
 *.Debug
 *.user*
+.qmake.stash
