@@ -1,0 +1,4 @@
+[submodule "3rdparty/fann"]
+	path = 3rdparty/fann
+	url = https://github.com/slyshykO/fann.git
+	branch = win32build

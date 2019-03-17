@@ -17,3 +17,4 @@ Makefile*
 *.ilk
 *.a
 *.lib
+build/*
