@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     m_taskList = new QListWidget();
     m_taskDock = new QDockWidget(tr("Training list"));
     m_taskDock->setWidget(m_taskList);
-    m_taskDock->setObjectName("m_taskDock");
+    m_taskDock->setObjectName(QStringLiteral("m_taskDock"));
     addDockWidget(Qt::LeftDockWidgetArea, m_taskDock, Qt::Vertical);
 
     m_startDialog = new StartTrainAnnDialog();
@@ -56,18 +56,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::saveWndState()
 {
     QSettings settings;
-    settings.beginGroup("main_window");
-    settings.setValue("geometry", saveGeometry());
-    settings.setValue("windowState", saveState());
+    settings.beginGroup(QStringLiteral("main_window"));
+    settings.setValue(QStringLiteral("geometry"), saveGeometry());
+    settings.setValue(QStringLiteral("windowState"), saveState());
     settings.endGroup();
 }
 
 void MainWindow::loadWndState()
 {
     QSettings settings;
-    settings.beginGroup("main_window");
-    restoreGeometry(settings.value("geometry").toByteArray());
-    restoreState   (settings.value("windowState").toByteArray());
+    settings.beginGroup(QStringLiteral("main_window"));
+    restoreGeometry(settings.value(QStringLiteral("geometry")).toByteArray());
+    restoreState   (settings.value(QStringLiteral("windowState")).toByteArray());
     settings.endGroup();
 }
 
@@ -87,7 +87,7 @@ void MainWindow::createActions()
 
 
     m_trainBar = new QToolBar(this);
-    m_trainBar->setObjectName("m_trainBar");
+    m_trainBar->setObjectName(QStringLiteral("m_trainBar"));
     m_trainBar->addAction(m_startTrainAct);
     m_trainBar->addAction(m_changeMaxThreadAct);
     addToolBar(Qt::TopToolBarArea, m_trainBar);
