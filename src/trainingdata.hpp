@@ -33,7 +33,7 @@ protected:
     friend class NeuralNetwork;
 
     /* Pointer to the encapsulated training data */
-    struct fann_train_data* m_train_data;
+    struct fann_train_data* m_train_data = nullptr;
     QString m_fileName;
 };
 

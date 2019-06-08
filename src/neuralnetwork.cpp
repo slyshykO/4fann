@@ -54,40 +54,7 @@ int FANN_API internalCallback(fann *ann, fann_train_data *train, unsigned int ma
 }
 
 NeuralNetwork::NeuralNetwork(QObject *parent)
-    : QObject(parent), m_state(WaitTraining),
-    m_annDirDefinition(""), m_num_output (0),
-    m_desired_error ((float) 0.001),
-    m_connectionRate((fann_type) 0.5), m_learningRate((fann_type) 0.7),
-    m_max_epochs (500000), m_epochs_between_reports (1000), m_numTrainnings(0),
-    m_saveTrain(false), m_ann(0),
-    m_activationHidden(0), m_activationOutput(0), m_netType(FANN_NETTYPE_LAYER),
-    m_max_neurons(10),m_neurons_between_reports(1),isCascadeTrain(false),
-    m_bitFailLimit(0.035),
-    m_hiddenActivationSteppness(0.5),
-    m_outputActivationSteppness(0.5),
-    m_quickPropDecayFactor(-0.0001),
-    m_RPROPIncreaseFactor(1.2),
-    m_initWeights(false),
-    m_quickPropMuFactor(1.75),
-    m_RPROPDecreaseFactor(0.5),
-    m_shuffleTrainData(false),
-    m_momentum(0.0),
-    m_RPROPMinStep(0),
-    m_RPROPMaxStep(50),
-    m_maxNumberOfNeurons(10),
-    m_outputChangeFraction(0.01),
-    m_outputStagnationEpochs(12),
-    m_weightMultiplier(0.4),
-    m_candidateChangeFraction(0.01),
-    m_candidateStagnationEpochs(12),
-    m_candidateLimit(1000),
-    m_maximumOutEpochs(150),
-    m_maximumCandidateEpochs(150),
-    m_numberOfCandidateGroups(2),
-    m_testMse(10000),
-    m_minTestAnn(0),
-    m_trainMse(10000),
-    m_minTrainAnn(0)
+    : QObject(parent)
 {
     connect(&m_trainFutureWatcher, SIGNAL(finished()), this, SLOT(trainFinished()) );
     connect(&m_trainFutureWatcher, SIGNAL(started()), this, SLOT(trainStarted()) );
@@ -243,35 +210,35 @@ QString NeuralNetwork::toString()
     if(m_ann != 0)
         {
             /* Save network parameters */
-            res.append(QString( "num_layers=%1\n").arg( (int)(m_ann->last_layer - m_ann->first_layer))) ;
-            res.append(QString( "learning_rate=%1\n").arg( m_ann->learning_rate));
-            res.append(QString( "connection_rate=%1\n").arg( m_ann->connection_rate));
-            res.append(QString( "network_type=%1\n").arg( FANN_NETTYPE_NAMES[m_ann->network_type]));
+            res.append(QStringLiteral( "num_layers=%1\n").arg( (int)(m_ann->last_layer - m_ann->first_layer))) ;
+            res.append(QStringLiteral( "learning_rate=%1\n").arg( m_ann->learning_rate));
+            res.append(QStringLiteral( "connection_rate=%1\n").arg( m_ann->connection_rate));
+            res.append(QStringLiteral( "network_type=%1\n").arg( FANN_NETTYPE_NAMES[m_ann->network_type]));
 
-            res.append(QString( "learning_momentum=%1\n").arg( m_ann->learning_momentum));
-            res.append(QString( "training_algorithm=%1\n").arg( FANN_TRAIN_NAMES[m_ann->training_algorithm]));
-            res.append(QString( "train_error_function=%1\n").arg( FANN_ERRORFUNC_NAMES[m_ann->train_error_function]));
-            res.append(QString( "train_stop_function=%1\n").arg( FANN_STOPFUNC_NAMES[m_ann->train_stop_function]));
-            res.append(QString( "cascade_output_change_fraction=%1\n").arg( m_ann->cascade_output_change_fraction));
-            res.append(QString( "quickprop_decay=%1\n").arg( m_ann->quickprop_decay));
-            res.append(QString( "quickprop_mu=%1\n").arg( m_ann->quickprop_mu));
-            res.append(QString( "rprop_increase_factor=%1\n").arg( m_ann->rprop_increase_factor));
-            res.append(QString( "rprop_decrease_factor=%1\n").arg( m_ann->rprop_decrease_factor));
-            res.append(QString( "rprop_delta_min=%1\n").arg( m_ann->rprop_delta_min));
-            res.append(QString( "rprop_delta_max=%1\n").arg( m_ann->rprop_delta_max));
-            res.append(QString( "rprop_delta_zero=%1\n").arg( m_ann->rprop_delta_zero));
-            res.append(QString( "cascade_output_stagnation_epochs=%1\n").arg( m_ann->cascade_output_stagnation_epochs));
-            res.append(QString( "cascade_candidate_change_fraction=%1\n").arg( m_ann->cascade_candidate_change_fraction));
-            res.append(QString( "cascade_candidate_stagnation_epochs=%1\n").arg( m_ann->cascade_candidate_stagnation_epochs));
-            res.append(QString( "cascade_max_out_epochs=%1\n").arg( m_ann->cascade_max_out_epochs));
-            res.append(QString( "cascade_min_out_epochs=%1\n").arg( m_ann->cascade_min_out_epochs));
-            res.append(QString( "cascade_max_cand_epochs=%1\n").arg( m_ann->cascade_max_cand_epochs));
-            res.append(QString( "cascade_min_cand_epochs=%1\n").arg( m_ann->cascade_min_cand_epochs));
-            res.append(QString( "cascade_num_candidate_groups=%1\n").arg( m_ann->cascade_num_candidate_groups));
+            res.append(QStringLiteral( "learning_momentum=%1\n").arg( m_ann->learning_momentum));
+            res.append(QStringLiteral( "training_algorithm=%1\n").arg( FANN_TRAIN_NAMES[m_ann->training_algorithm]));
+            res.append(QStringLiteral( "train_error_function=%1\n").arg( FANN_ERRORFUNC_NAMES[m_ann->train_error_function]));
+            res.append(QStringLiteral( "train_stop_function=%1\n").arg( FANN_STOPFUNC_NAMES[m_ann->train_stop_function]));
+            res.append(QStringLiteral( "cascade_output_change_fraction=%1\n").arg( m_ann->cascade_output_change_fraction));
+            res.append(QStringLiteral( "quickprop_decay=%1\n").arg( m_ann->quickprop_decay));
+            res.append(QStringLiteral( "quickprop_mu=%1\n").arg( m_ann->quickprop_mu));
+            res.append(QStringLiteral( "rprop_increase_factor=%1\n").arg( m_ann->rprop_increase_factor));
+            res.append(QStringLiteral( "rprop_decrease_factor=%1\n").arg( m_ann->rprop_decrease_factor));
+            res.append(QStringLiteral( "rprop_delta_min=%1\n").arg( m_ann->rprop_delta_min));
+            res.append(QStringLiteral( "rprop_delta_max=%1\n").arg( m_ann->rprop_delta_max));
+            res.append(QStringLiteral( "rprop_delta_zero=%1\n").arg( m_ann->rprop_delta_zero));
+            res.append(QStringLiteral( "cascade_output_stagnation_epochs=%1\n").arg( m_ann->cascade_output_stagnation_epochs));
+            res.append(QStringLiteral( "cascade_candidate_change_fraction=%1\n").arg( m_ann->cascade_candidate_change_fraction));
+            res.append(QStringLiteral( "cascade_candidate_stagnation_epochs=%1\n").arg( m_ann->cascade_candidate_stagnation_epochs));
+            res.append(QStringLiteral( "cascade_max_out_epochs=%1\n").arg( m_ann->cascade_max_out_epochs));
+            res.append(QStringLiteral( "cascade_min_out_epochs=%1\n").arg( m_ann->cascade_min_out_epochs));
+            res.append(QStringLiteral( "cascade_max_cand_epochs=%1\n").arg( m_ann->cascade_max_cand_epochs));
+            res.append(QStringLiteral( "cascade_min_cand_epochs=%1\n").arg( m_ann->cascade_min_cand_epochs));
+            res.append(QStringLiteral( "cascade_num_candidate_groups=%1\n").arg( m_ann->cascade_num_candidate_groups));
         }
     else
         {
-            res = "NULL";
+            res = QStringLiteral("NULL");
         }
 
     return res;
@@ -485,15 +452,15 @@ QString NeuralNetwork::fileName()
             for(int i = 0; i < m_num_neurons_hidden.size(); ++i )
                 {
                     if(i != (m_num_neurons_hidden.size()-1) )
-                        tmp.append(QString("%1_").arg(m_num_neurons_hidden[i]));
+                        tmp.append(QStringLiteral("%1_").arg(m_num_neurons_hidden[i]));
                     else
-                        tmp.append(QString("%1").arg(m_num_neurons_hidden[i]));
+                        tmp.append(QStringLiteral("%1").arg(m_num_neurons_hidden[i]));
                 }
-            m_fileName = QString("%1-[%2]-%3(%4).ann")
+            m_fileName = QStringLiteral("%1-[%2]-%3(%4).ann")
                          .arg(numInput())
                          .arg(tmp)
                          .arg(numOutput())
-                         .arg(QDateTime::currentDateTime().toString("hh-mm-ss"));
+                         .arg(QDateTime::currentDateTime().toString(QStringLiteral("hh-mm-ss")));
         }
 
     return m_fileName;
@@ -555,7 +522,7 @@ QVector<uint> NeuralNetwork::numNeuronsHidden()
     return m_num_neurons_hidden;
 }
 
-void NeuralNetwork::setNumNeuronsHidden(QVector<uint> numNeuronsHidden)
+void NeuralNetwork::setNumNeuronsHidden(QVector<uint>&& numNeuronsHidden)
 {
     this->m_num_neurons_hidden = numNeuronsHidden;
 }

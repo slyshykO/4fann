@@ -58,7 +58,7 @@ public:
     uint numOutput() const;
     uint numHiddenLayers();
     QVector<uint> numNeuronsHidden();
-    void setNumNeuronsHidden(QVector<uint> numNeuronsHidden);
+    void setNumNeuronsHidden(QVector<uint>&& numNeuronsHidden);
 
     float desiredError();
     void setDesiredError(float desired_error);
@@ -165,13 +165,13 @@ private:
     QString m_fileName;
 
     /** Указатель на нейронную сеть */
-    struct fann * m_ann;
+    struct fann * m_ann = nullptr;
     /** Временно хранит среднеквадратическую ошибку для теста */
-    double m_testMse;
-    struct fann * m_minTestAnn;
+    double m_testMse = 10000.0;
+    struct fann * m_minTestAnn = nullptr;
     /** Временно хранит среднеквадратическую ошибку для тренировки */
-    double m_trainMse;
-    struct fann * m_minTrainAnn;
+    double m_trainMse = 10000.0;
+    struct fann * m_minTrainAnn = nullptr;
     /** Тренировочные данные для тестов*/
     QString m_testFileName;
     TrainingData m_testData;
@@ -180,63 +180,63 @@ private:
 
 
     /** Тип нейронной сети*/
-    uint m_netType;
+    uint m_netType = FANN_NETTYPE_LAYER;
     /** Количество входов нейронной сети*/
     unsigned int m_num_input;
     /** Количество выходов нейронной сети*/
-    unsigned int m_num_output;
+    unsigned int m_num_output = 0;
     /** Количество нейронов в скрытых слоях */
     QVector<uint> m_num_neurons_hidden;
     /** Желаемая ошибка */
-    float m_desired_error;
-    fann_type m_bitFailLimit;
-    fann_type m_connectionRate;
-    fann_type m_learningRate;
+    float m_desired_error = ((float) 0.001) ;
+    fann_type m_bitFailLimit = ((fann_type)0.035);
+    fann_type m_connectionRate = ((fann_type) 0.5);
+    fann_type m_learningRate = ((fann_type) 0.7);
     /** Желаемый алгоритм обучения */
     int m_trainAlgorithm;
     /** Тип обучения, который будет использоваться */
     int m_trainType;
     /** Функця активации скрытых слоев*/
-    int m_activationHidden;
+    int m_activationHidden = 0;
     /**  Функця активации выходов*/
-    int m_activationOutput;
+    int m_activationOutput = 0;
     /** Функция ошибки */
     int m_trainErrorFunc;
 
-    uint m_max_epochs;
-    uint m_epochs_between_reports;
+    uint m_max_epochs = 500000;
+    uint m_epochs_between_reports = 1000;
 
-    uint m_max_neurons;
-    uint m_neurons_between_reports;
-    bool isCascadeTrain;
+    uint m_max_neurons = 10;
+    uint m_neurons_between_reports = 1;
+    bool isCascadeTrain = false;
 
     /** Указывает, следует ли сохранить обучение */
-    bool m_saveTrain;
+    bool m_saveTrain = false;
 
     /** Указывает на количество тренировок, которые вносятся в сети */
-    int m_numTrainnings;
+    int m_numTrainnings = 0;
 
-    double m_hiddenActivationSteppness;
-    double m_outputActivationSteppness;
-    double m_quickPropDecayFactor;
-    double m_RPROPIncreaseFactor;
-    bool m_initWeights;
-    double m_quickPropMuFactor;
-    double m_RPROPDecreaseFactor;
-    bool m_shuffleTrainData;
-    double m_momentum;
-    uint m_RPROPMinStep;
-    uint m_RPROPMaxStep;
-    uint m_maxNumberOfNeurons;
-    double m_outputChangeFraction;
-    uint m_outputStagnationEpochs;
-    double m_weightMultiplier;
-    double m_candidateChangeFraction;
-    uint m_candidateStagnationEpochs;
-    uint m_candidateLimit;
-    uint m_maximumOutEpochs;
-    uint m_maximumCandidateEpochs;
-    uint m_numberOfCandidateGroups;
+    double m_hiddenActivationSteppness = 0.5;
+    double m_outputActivationSteppness = 0.5;
+    double m_quickPropDecayFactor = -0.0001;
+    double m_RPROPIncreaseFactor = 1.2;
+    bool m_initWeights = false;
+    double m_quickPropMuFactor = 1.75;
+    double m_RPROPDecreaseFactor = 0.5;
+    bool m_shuffleTrainData = false;
+    double m_momentum = 0.;
+    uint m_RPROPMinStep = 0;
+    uint m_RPROPMaxStep = 50;
+    uint m_maxNumberOfNeurons = 10;
+    double m_outputChangeFraction = 0.01;
+    uint m_outputStagnationEpochs = 12;
+    double m_weightMultiplier = 0.4;
+    double m_candidateChangeFraction = 0.01;
+    uint m_candidateStagnationEpochs = 12;
+    uint m_candidateLimit = 1000;
+    uint m_maximumOutEpochs = 150;
+    uint m_maximumCandidateEpochs = 150;
+    uint m_numberOfCandidateGroups = 2;
 
     QMutex m_mutex;
     QFutureWatcher<void> m_trainFutureWatcher;
@@ -245,9 +245,9 @@ private:
     QVector<float> m_mseTestHistory;
     QVector<uint> m_bitFailTestHistory;
     QVector<uint> m_epochHistory;
-    int m_epoch;
+    int m_epoch = 0;
 
-    ENeuralState m_state;
+    ENeuralState m_state = {WaitTraining};
 
 private slots:
    void trainFinished();

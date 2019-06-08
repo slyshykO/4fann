@@ -9,7 +9,6 @@
 #include <QDebug>
 
 TrainingData::TrainingData()
-    : m_train_data(0)
 {
 
 }
@@ -87,6 +86,6 @@ bool TrainingData::loadFromFile(const QString &fn)
     if( m_train_data != 0 )
         m_fileName = fileName;
 
-    return (m_train_data != 0);
+    return (m_train_data != nullptr);
 }
 

@@ -258,7 +258,7 @@ uint NetPanel::numberOfCandidateGroups() const
 void NetPanel::openTrainFile()
 {
     QString fileName;
-    fileName = QFileDialog::getOpenFileName(this,tr("Open trainibg data file"),last_opened_data_dir_);
+    fileName = QFileDialog::getOpenFileName(this,tr("Open training data file"),last_opened_data_dir_);
     ui->trainEdit->setText(fileName);
     if( !fileName.isNull() )
         {
