@@ -52,10 +52,14 @@ set(SRC_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/4fann.qrc
     )
 
+source_group("src" FILES ${SRC_LIST})
+
 set(QCUSTOMPLOT_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qcustomplot-source/qcustomplot.h
     ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qcustomplot-source/qcustomplot.cpp
 )
+
+source_group("src" FILES ${QCUSTOMPLOT_SRC})
 
 add_library(qcustomlot ${QCUSTOMPLOT_SRC})
 target_link_libraries (qcustomlot
