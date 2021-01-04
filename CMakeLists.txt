@@ -30,8 +30,6 @@ ENDIF(OPENMP_FOUND)
 find_package(Qt5 COMPONENTS Widgets Concurrent Printsupport)
 #core gui widgets concurrent printsupport
 set(SRC_LIST
-    ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qcustomplot-source/qcustomplot.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qcustomplot-source/qcustomplot.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/mainwindow.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/mainwindow.hpp
@@ -54,6 +52,16 @@ set(SRC_LIST
     ${CMAKE_CURRENT_SOURCE_DIR}/4fann.qrc
     )
 
+set(QCUSTOMPLOT_SRC
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qcustomplot-source/qcustomplot.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/qcustomplot-source/qcustomplot.cpp
+)
+
+add_library(qcustomlot ${QCUSTOMPLOT_SRC})
+target_link_libraries (qcustomlot
+    Qt5::Core Qt5::Widgets Qt5::PrintSupport
+)
+
 if(WIN32)
     SET(GUI_TYPE WIN32)
 endif(WIN32)
@@ -67,6 +75,7 @@ target_link_directories(${PROJECT_NAME}
 target_link_libraries (${PROJECT_NAME}
     Qt5::Core Qt5::Widgets Qt5::Concurrent Qt5::PrintSupport
     doublefann_static
+    qcustomlot
     ${OpenMP_CXX_LIBRARIES}
     )
 target_include_directories(${PROJECT_NAME}
