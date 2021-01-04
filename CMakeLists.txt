@@ -11,12 +11,14 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(FANN_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/3rdparty/fann/build-release/${CMAKE_C_COMPILER_ID}-${CMAKE_C_COMPILER_VERSION}-${CMAKE_SIZEOF_VOID_P})
+
 include(ExternalProject)
 ExternalProject_Add(fann
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/fann
-    BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/fann/build-release/${CMAKE_C_COMPILER_ID}-${CMAKE_C_COMPILER_VERSION}-${CMAKE_SIZEOF_VOID_P}
-    CONFIGURE_COMMAND ${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE=Release -G ${CMAKE_GENERATOR} ../..
-    BUILD_COMMAND ${CMAKE_COMMAND} --build . --target all
+    BINARY_DIR ${FANN_BUILD_DIR}
+    CONFIGURE_COMMAND ${CMAKE_COMMAND} -S ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/fann -B ${FANN_BUILD_DIR} -DCMAKE_BUILD_TYPE=Release -G ${CMAKE_GENERATOR}
+    BUILD_COMMAND ${CMAKE_COMMAND} --build ${FANN_BUILD_DIR} --target all
     BUILD_ALWAYS TRUE
     INSTALL_COMMAND ""
     TEST_COMMAND ""
@@ -74,7 +76,7 @@ add_executable(${PROJECT_NAME} ${GUI_TYPE} ${SRC_LIST})
 add_dependencies(${PROJECT_NAME} fann)
 target_link_directories(${PROJECT_NAME}
     PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/fann/build-release/${CMAKE_C_COMPILER_ID}-${CMAKE_C_COMPILER_VERSION}-${CMAKE_SIZEOF_VOID_P}/src
+        ${FANN_BUILD_DIR}/src
     )
 target_link_libraries (${PROJECT_NAME}
     Qt5::Core Qt5::Widgets Qt5::Concurrent Qt5::PrintSupport
