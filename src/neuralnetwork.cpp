@@ -379,34 +379,34 @@ void NeuralNetwork::trainFinished()
     if(file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
         {
             QTextStream stream(&file);
-            stream<<"net:"<<fileName()<<endl;
-            stream<<"train method:"<< (isCascadeTrain ? "cascade" : "normal")<<endl;
-            stream<<"hidden activation:"<<FANN_ACTIVATIONFUNC_NAMES[m_activationHidden]<<endl;
-            stream<<"output activation:"<<FANN_ACTIVATIONFUNC_NAMES[m_activationOutput]<<endl;
-            stream<<"max epochs:"<<m_max_epochs<<endl;
-            stream<<"epochs between reports:"<<m_epochs_between_reports<<endl;
-            stream<<"max neurons:"<<m_max_neurons<<endl;
-            stream<<"neurons between reports:"<<m_neurons_between_reports<<endl;
-            stream<<"desiered error:"<<m_desired_error<<endl;
-            stream<<"error:"<<fann_get_MSE(m_ann)<<endl;
+            stream<<"net:"<<fileName()<< Qt::endl;
+            stream<<"train method:"<< (isCascadeTrain ? "cascade" : "normal")<<Qt::endl;
+            stream<<"hidden activation:"<<FANN_ACTIVATIONFUNC_NAMES[m_activationHidden]<<Qt::endl;
+            stream<<"output activation:"<<FANN_ACTIVATIONFUNC_NAMES[m_activationOutput]<<Qt::endl;
+            stream<<"max epochs:"<<m_max_epochs<<Qt::endl;
+            stream<<"epochs between reports:"<<m_epochs_between_reports<<Qt::endl;
+            stream<<"max neurons:"<<m_max_neurons<<Qt::endl;
+            stream<<"neurons between reports:"<<m_neurons_between_reports<<Qt::endl;
+            stream<<"desiered error:"<<m_desired_error<<Qt::endl;
+            stream<<"error:"<<fann_get_MSE(m_ann)<<Qt::endl;
             stream<<"train errors:";
             foreach ( const float & f , m_mseHistory)
                 {
                     stream<<f<<" ";
                 }
-            stream<<endl;
+            stream<<Qt::endl;
             stream<<"train bit fails:";
             foreach ( const uint & u , m_bitFailHistory)
                 {
                     stream<<u<<" ";
                 }
-            stream<<endl;
+            stream<<Qt::endl;
             stream<<"epochs:";
             foreach ( const uint & u , m_epochHistory)
                 {
                     stream<<u<<" ";
                 }
-            stream<<endl;
+            stream<<Qt::endl;
         }
 
     qDebug()<<"Ann saved to "<<fileInfo.absoluteFilePath();
